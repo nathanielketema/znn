@@ -4,9 +4,8 @@ const testing = std.testing;
 const Io = std.Io;
 const Allocator = std.mem.Allocator;
 
+pub const Matrix = @import("Matrix.zig");
 const fatal = @import("fatal.zig").fatal;
-pub const mtx = @import("matrix.zig");
-const Matrix = mtx.Matrix;
 const oom = @import("fatal.zig").oom;
 
 pub const NN = struct {
