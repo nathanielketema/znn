@@ -121,7 +121,7 @@ pub const NN = struct {
         for (nn.biases) |*bias| bias.fill(0);
     }
 
-    fn format(nn: NN, writer: *Io.Writer) !void {
+    pub fn format(nn: NN, writer: *Io.Writer) !void {
         try writer.print("  weights = {{\n", .{});
         for (nn.weights, 0..) |wght, i| {
             if (i > 0) try writer.print("\n", .{});
