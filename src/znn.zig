@@ -207,23 +207,20 @@ pub const NN = struct {
         }
 
         var i: usize = nn.weights.len;
-        while (i > 0) {
+        while (i > 1) {
             i -= 1;
+            for (0..nn.deltas[i - 1].shape.row) |r| {
+                for (0..nn.deltas[i - 1].shape.col) |c| {
+                    const sum = b: {
+                        var sum_tmp: f32 = 0;
+                        for (0..nn.deltas[i].shape.col) |k| {
+                            sum_tmp += nn.deltas[i].at(r, k) * nn.weights[i].at(c, k);
+                        }
+                        break :b sum_tmp;
+                    };
 
-            if (i > 0) {
-                for (0..nn.deltas[i - 1].shape.row) |r| {
-                    for (0..nn.deltas[i - 1].shape.col) |c| {
-                        const sum = b: {
-                            var sum_tmp: f32 = 0;
-                            for (0..nn.deltas[i].shape.col) |k| {
-                                sum_tmp += nn.deltas[i].at(r, k) * nn.weights[i].at(c, k);
-                            }
-                            break :b sum_tmp;
-                        };
-
-                        const output = nn.activations[i].at(r, c);
-                        nn.deltas[i - 1].ptr(r, c).* = sum * nn.activation_fn.derivative(output);
-                    }
+                    const output = nn.activations[i].at(r, c);
+                    nn.deltas[i - 1].ptr(r, c).* = sum * nn.activation_fn.derivative(output);
                 }
             }
         }
